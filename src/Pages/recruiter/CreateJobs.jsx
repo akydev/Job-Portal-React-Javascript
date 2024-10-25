@@ -261,18 +261,6 @@ export default function CreateJobs() {
               />
             </Grid2>
             <Grid2 size={12}>
-              <TextField
-                label="Skills"
-                variant="standard"
-                color="secondary"
-                placeholder="Press Enter to add skills"
-                fullWidth
-                value={skillInput}
-                onChange={(e) => setSkillInput(e.target.value)}
-                onKeyDown={handleAddSkill}
-              />
-            </Grid2>
-            <Grid2 size={12}>
               {values.skillsets.length > 0 && (
                 <div>
                   {values.skillsets.map((skill, index) => (
@@ -287,6 +275,19 @@ export default function CreateJobs() {
                 </div>
               )}
             </Grid2>
+            <Grid2 size={12}>
+              <TextField
+                label="Skills"
+                variant="standard"
+                color="secondary"
+                placeholder="Press Enter to add skills"
+                fullWidth
+                value={skillInput}
+                onChange={(e) => setSkillInput(e.target.value)}
+                onKeyDown={handleAddSkill}
+              />
+            </Grid2>
+
             <Grid2 size={12}>
               <FormControl fullWidth>
                 <InputLabel>Job Type</InputLabel>

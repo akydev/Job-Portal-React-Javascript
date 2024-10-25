@@ -9,33 +9,175 @@ import {
   Chip,
   Container,
   Grid,
+  Grid2,
   Rating,
+  SwipeableDrawer,
   Typography,
 } from "@mui/material";
 import { useTheme } from "../components/ThemeContext";
 import { blue, grey } from "@mui/material/colors";
+import ApplyViewDialog from "./applicant/ApplyViewDialog";
+import FilterDrawerContent from "../components/FilterDrawerContent";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 export default function JobList() {
   const { toggleTheme } = useTheme();
 
   const [data, setData] = useState([]);
-
+  const [showModal, setShowModal] = useState(false);
+  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
+  const [isDrawerOpen, setDrawerOpen] = React.useState(false);
+  const [filters, setFilters] = useState({});
   const type = localStorage.getItem("type");
+
+  const handleClose = () => {
+    setShowModal(false);
+    setId(null);
+    setTitle(null);
+  };
+
+  const handleOpen = (id, titleName) => {
+    setShowModal(true);
+    setId(id);
+    setTitle(titleName);
+  };
+
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
+  const fetchJobs = (filterParams) => {
+    let queryString = `http://localhost:4444/api/jobs?`;
+
+    // Add jobType filters to the query string
+    if (filterParams.fullTime) {
+      queryString += `jobType=Full%20Time&`;
+    }
+    if (filterParams.partTime) {
+      queryString += `jobType=Part%20Time&`;
+    }
+    if (filterParams.wfh) {
+      queryString += `jobType=Work%20from%20Home&`;
+    }
+
+    // Add salary range to the query string
+    if (filterParams.salaryMin !== undefined && filterParams.salaryMin !== 0) {
+      queryString += `salaryMin=${filterParams.salaryMin}&`;
+    }
+    if (
+      filterParams.salaryMax !== undefined &&
+      filterParams.salaryMax !== 100000
+    ) {
+      queryString += `salaryMax=${filterParams.salaryMax}&`;
+    }
+
+    // Add duration to the query string
+    if (filterParams.duration && filterParams.duration !== "0") {
+      queryString += `duration=${filterParams.duration}&`;
+    }
+
+    // Add sort order (asc/desc)
+    if (filterParams.asc) {
+      Object.keys(filterParams.asc).forEach((key) => {
+        if (filterParams.asc[key]) {
+          queryString += `asc=${key}&`;
+        }
+      });
+    }
+    if (filterParams.desc) {
+      Object.keys(filterParams.desc).forEach((key) => {
+        if (filterParams.desc[key]) {
+          queryString += `desc=${key}&`;
+        }
+      });
+    }
+
+    // Trim the trailing "&" or "?" from the query string if necessary
+    queryString = queryString.endsWith("&")
+      ? queryString.slice(0, -1)
+      : queryString;
+
+    // Make API call
+    authFetch
+      .get(queryString)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // Fetch initial data or filtered data when filters change
   useEffect(() => {
-    //  authFetch.get("/job?myjob=1").then(res=>{
-    // setData(res.data)})
-    authFetch.get("/jobs").then((res) => {
-      setData(res.data);
-      console.log(res.data);
-    });
-  }, []);
+    fetchJobs(filters);
+  }, [filters]);
+
+  // Handler to apply filters from the drawer
+  const handleApplyFilters = (filterData) => {
+    setFilters(filterData);
+    setDrawerOpen(false); // Close the drawer after applying filters
+  };
+
   return (
     <Container>
       {/* <CustomHeader /> */}
-      <Button variant="contained" onClick={toggleTheme}>
-        Toggle Theme
-      </Button>
-      <Grid container spacing={2}>
+      <Grid2
+        paddingTop={2}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          component="p"
+          sx={{
+            fontWeight: 500,
+            color: "grey.800",
+            fontSize: "1rem",
+          }}
+        >
+          Recent Openings
+        </Box>
+        <Button
+          onClick={toggleDrawer(true)}
+          title="Filter Jobs"
+          sx={{
+            backgroundColor: grey[100],
+            "&:hover": {
+              backgroundColor: grey[200],
+            },
+            padding: "10px",
+            borderRadius: "10px",
+          }}
+        >
+          <FilterListIcon fontSize="medium" />
+        </Button>
+      </Grid2>
+      <SwipeableDrawer
+        anchor="top"
+        open={isDrawerOpen}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+        PaperProps={{
+          sx: { margin: "144px", alignItems: "center", borderRadius: "10px" },
+        }}
+      >
+        <FilterDrawerContent
+          toggleDrawer={toggleDrawer}
+          onApplyFilters={handleApplyFilters}
+        />
+      </SwipeableDrawer>
+      <Grid container spacing={2} sx={{ paddingTop: "34px" }}>
         {data.map((job) => (
           <Grid item xs={12} sm={6} md={4} key={job.id}>
             <Card
@@ -103,18 +245,31 @@ export default function JobList() {
               </CardContent>
               <CardActions>
                 <Button
-                  size="small"
-                  type="button"
-                  sx={{ backgroundColor: grey[400], color: "white" }}
+                  variant="contained"
+                  sx={{
+                    backgroundColor: blue[500],
+                    "&:hover": {
+                      backgroundColor: blue[400],
+                    },
+                  }}
+                  onClick={() => handleOpen(job._id, job.title)}
                   disabled={type === "recruiter"}
                 >
-                  View
+                  Apply
                 </Button>
               </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
+      {showModal && (
+        <ApplyViewDialog
+          handleClose={handleClose}
+          id={id}
+          showModal={showModal}
+          title={title}
+        />
+      )}
     </Container>
   );
 }

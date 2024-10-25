@@ -9,6 +9,7 @@ import { useTheme } from "./components/ThemeContext"; // Correct import
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import Logout from "./common/Logout";
 import Applications from "./Pages/applicant/Applications";
+import JobApplications from "./Pages/recruiter/JobApplications";
 
 const AuthRoutes = () => {
   const { theme } = useTheme();
@@ -22,6 +23,10 @@ const AuthRoutes = () => {
           <Route path="/myjobs" element={<MyJobs />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/applications" element={<Applications />} />
+          <Route
+            path="/job/applications/:jobId"
+            element={<JobApplications />}
+          />
           <Route path="/jobs" element={<JobList />} />
           <Route path="/logout" element={<Logout />} />
         </Routes>

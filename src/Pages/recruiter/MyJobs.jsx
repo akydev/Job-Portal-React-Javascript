@@ -12,6 +12,7 @@ import {
   Rating,
   Chip,
   Box,
+  Grid2,
 } from "@mui/material";
 // import CustomHeader from "../../common/CustomHeader";
 import { styled } from "@mui/system";
@@ -49,9 +50,18 @@ export default function MyJobs() {
   return (
     <Container>
       {/* <CustomHeader /> */}
-      <Button variant="contained" onClick={toggleTheme}>
-        Toggle Theme
-      </Button>
+      <Grid2>
+        <Box
+          component="p"
+          sx={{
+            fontWeight: 500,
+            color: "grey.800",
+            fontSize: "1rem",
+          }}
+        >
+          My recent posted jobs.
+        </Box>
+      </Grid2>
       <Grid container spacing={2}>
         {loading ? (
           <CircularProgress />
@@ -59,9 +69,10 @@ export default function MyJobs() {
           <>
             {data.map((job) => (
               <MyJobsChildData
-                data={job}
+                data={job} // object of job data
                 key={job._id}
                 triggerRefresh={triggerRefresh}
+                jobData={data} // array of job data
               />
             ))}
           </>

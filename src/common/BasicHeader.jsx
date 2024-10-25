@@ -33,6 +33,7 @@
 
 import {
   AppBar,
+  Box,
   Button,
   Menu,
   MenuItem,
@@ -40,6 +41,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import HomeIcon from "@mui/icons-material/Home"; // Import your chosen icon
 
 export default function BasicHeader() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -54,19 +56,24 @@ export default function BasicHeader() {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography variant="h6" sx={{ display: "flex", alignItems: "center" }}>
+          <HomeIcon sx={{ mr: 1, alignItems: "center" }} />{" "}
+          {/* Icon with margin */}
           <a href="/" style={{ color: "inherit", textDecoration: "none" }}>
             My Job Portal
           </a>
         </Typography>
+        <Box>
+          {" "}
+          <Button color="inherit" href="/login">
+            Login
+          </Button>
+          <Button color="inherit" onClick={handleMenuClick}>
+            Sign Up
+          </Button>
+        </Box>
 
-        <Button color="inherit" href="/login">
-          Login
-        </Button>
-        <Button color="inherit" onClick={handleMenuClick}>
-          Sign Up
-        </Button>
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}

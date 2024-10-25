@@ -11,16 +11,29 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import DeleteMyJobs from "./DeleteMyJobs";
+import { useNavigate } from "react-router-dom";
+import UpdateMyJobs from "./UpdateMyJobs";
 
-const MyJobsChildData = ({ data, triggerRefresh }) => {
-  const [deleteModal, setDeleteModal] = useState(false);
+const MyJobsChildData = ({ data, triggerRefresh, jobData }) => {
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
-  const handleDelClose = () => {
-    setDeleteModal(false);
+
+  const handleView = (id) => {
+    navigate(`/job/applications/${id}`);
+  };
+  const handleClose = () => {
+    setShowModal(false);
     setId(null);
   };
+
+  const handleUpdateOpen = (id) => {
+    setShowModal(true);
+    setId(id);
+  };
+
   const handleDelOpen = (id) => {
-    setDeleteModal(true);
+    setShowModal(true);
     setId(id);
   };
   return (
@@ -90,19 +103,32 @@ const MyJobsChildData = ({ data, triggerRefresh }) => {
           </Box>
         </CardContent>
         <CardActions>
-          <Button size="small">View</Button>
-          <Button size="small">Edit</Button>
+          <Button size="small" onClick={() => handleView(data._id)}>
+            View
+          </Button>
+          <Button size="small" onClick={() => handleUpdateOpen(data._id)}>
+            Edit
+          </Button>
           <Button size="small" onClick={() => handleDelOpen(data._id)}>
             Delete
           </Button>
         </CardActions>
       </Card>
-      {deleteModal && (
+      {showModal && (
         <DeleteMyJobs
           id={id}
-          handleDelClose={handleDelClose}
-          deleteModal={deleteModal}
+          handleDelClose={handleClose}
+          deleteModal={showModal}
           title={data.title}
+          triggerRefresh={triggerRefresh}
+        />
+      )}
+      {showModal && (
+        <UpdateMyJobs
+          id={id}
+          handleClose={handleClose}
+          open={showModal}
+          updateData={jobData} // array of job data which coming from parent
           triggerRefresh={triggerRefresh}
         />
       )}

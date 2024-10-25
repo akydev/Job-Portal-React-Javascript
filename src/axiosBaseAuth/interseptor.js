@@ -1,5 +1,5 @@
 import axios from "axios";
-import { json } from "react-router-dom";
+
 const apiUrl = "http://localhost:4444/api";
 let authFetch = axios.create({
   baseURL: apiUrl,
@@ -7,8 +7,7 @@ let authFetch = axios.create({
 
 authFetch.interceptors.request.use(
   (request) => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token = localStorage.getItem("token");
     if (token) {
       request.headers.Authorization = `Bearer ${token}`;
     }
