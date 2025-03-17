@@ -128,10 +128,9 @@ export default function JobList() {
   };
 
   return (
-    <Container>
+    <Container sx={{ paddingBottom: 4, paddingTop: 2 }}>
       {/* <CustomHeader /> */}
       <Grid2
-        paddingTop={2}
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -146,7 +145,9 @@ export default function JobList() {
             fontSize: "1rem",
           }}
         >
-          Recent Openings
+          <Typography variant="h5" gutterBottom>
+            Jobs List
+          </Typography>
         </Box>
         <Button
           onClick={toggleDrawer(true)}
@@ -177,7 +178,7 @@ export default function JobList() {
           onApplyFilters={handleApplyFilters}
         />
       </SwipeableDrawer>
-      <Grid container spacing={2} sx={{ paddingTop: "34px" }}>
+      <Grid container spacing={4}>
         {data.map((job) => (
           <Grid item xs={12} sm={6} md={4} key={job.id}>
             <Card
@@ -242,11 +243,11 @@ export default function JobList() {
                   </Typography>
                   <Rating value={job.rating} readOnly />
                 </Box>
-              </CardContent>
-              <CardActions>
                 <Button
+                  fullWidth
                   variant="contained"
                   sx={{
+                    marginTop: 2,
                     backgroundColor: blue[500],
                     "&:hover": {
                       backgroundColor: blue[400],
@@ -257,7 +258,7 @@ export default function JobList() {
                 >
                   Apply
                 </Button>
-              </CardActions>
+              </CardContent>
             </Card>
           </Grid>
         ))}

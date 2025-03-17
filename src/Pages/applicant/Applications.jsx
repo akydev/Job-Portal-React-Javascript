@@ -15,6 +15,7 @@ import {
   Card,
   CardActions,
   Chip,
+  Container,
   Dialog,
   DialogActions,
   Grid2,
@@ -81,7 +82,7 @@ const Applications = () => {
     }
   };
   return (
-    <Box>
+    <Container>
       <Grid2 container spacing={3} justifyContent="center">
         <Typography
           variant="h4"
@@ -100,7 +101,7 @@ const Applications = () => {
           Applications
         </Typography>
       </Grid2>
-      <Grid2 spacing={3} width="100%">
+      <Grid2 spacing={3} container justifyContent="center">
         {data.map((value) => (
           <Card sx={{ borderRadius: "30px" }} key={value._id}>
             <Grid2 sx={{ paddingX: "25px" }}>
@@ -284,7 +285,7 @@ const Applications = () => {
           </Card>
         ))}
       </Grid2>
-    </Box>
+    </Container>
   );
 };
 
