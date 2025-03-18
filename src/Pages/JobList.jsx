@@ -127,6 +127,8 @@ export default function JobList() {
     setDrawerOpen(false); // Close the drawer after applying filters
   };
 
+  // display card in reverse order and dispaly most recent post first
+
   return (
     <Container sx={{ paddingBottom: 4, paddingTop: 2 }}>
       {/* <CustomHeader /> */}
@@ -179,89 +181,92 @@ export default function JobList() {
         />
       </SwipeableDrawer>
       <Grid container spacing={4}>
-        {data.map((job) => (
-          <Grid item xs={12} sm={6} md={4} key={job.id}>
-            <Card
-              sx={{
-                border: "1px solid #e0e0e0",
-                borderRadius: 2,
-                boxShadow: 2,
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant="h5"
-                  component="div"
-                  sx={{ fontWeight: "bold", mb: 1 }}
-                >
-                  {job.title}
-                </Typography>
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                  Skills:
-                </Typography>
-                <Box>
-                  {job.skillsets?.map((skill) => (
-                    <Chip
-                      label={skill}
-                      color="secondary"
-                      variant="outlined"
-                      sx={{ m: 1 }}
-                    />
-                  ))}
-                </Box>
-                <Typography
-                  variant="subtitle2"
-                  marginY={1}
-                  sx={{ fontWeight: "bold" }}
-                >
-                  Job Details
-                </Typography>
-                <Typography variant="body2" marginY={1}>
-                  Job Type: {job.jobType}
-                </Typography>
-                <Typography variant="body2" marginY={1}>
-                  Duration:{" "}
-                  {job.duration !== 0 ? `${job.duration} month` : "Flexible"}
-                </Typography>
-
-                <Typography color="text.secondary" marginY={1}>
-                  Salary: {job.salary}
-                </Typography>
-                <Typography variant="body2" marginY={1}>
-                  Date Of Posting:{" "}
-                  {new Date(job.dateOfPosting).toLocaleDateString()}
-                </Typography>
-                <Typography color="text.secondary" marginY={1}>
-                  Applicants: {job.maxApplicants}
-                </Typography>
-                <Typography color="text.secondary" marginY={1}>
-                  Positions: {job.maxPositions - job.acceptedCandidates}
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <Typography variant="body2" marginY={1}>
-                    Rating:
+        {data
+          .map((job) => (
+            <Grid item xs={12} sm={6} md={4} key={job._id}>
+              <Card
+                sx={{
+                  border: "1px solid #e0e0e0",
+                  borderRadius: 2,
+                  boxShadow: 2,
+                }}
+              >
+                <CardContent>
+                  <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{ fontWeight: "bold", mb: 1 }}
+                  >
+                    {job.title}
                   </Typography>
-                  <Rating value={job.rating} readOnly />
-                </Box>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    marginTop: 2,
-                    backgroundColor: blue[500],
-                    "&:hover": {
-                      backgroundColor: blue[400],
-                    },
-                  }}
-                  onClick={() => handleOpen(job._id, job.title)}
-                  disabled={type === "recruiter"}
-                >
-                  Apply
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Skills:
+                  </Typography>
+                  <Box>
+                    {job.skillsets?.map((skill, index) => (
+                      <Chip
+                        key={index}
+                        label={skill}
+                        color="secondary"
+                        variant="outlined"
+                        sx={{ m: 1 }}
+                      />
+                    ))}
+                  </Box>
+                  <Typography
+                    variant="subtitle2"
+                    marginY={1}
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    Job Details
+                  </Typography>
+                  <Typography variant="body2" marginY={1}>
+                    Job Type: {job.jobType}
+                  </Typography>
+                  <Typography variant="body2" marginY={1}>
+                    Duration:{" "}
+                    {job.duration !== 0 ? `${job.duration} month` : "Flexible"}
+                  </Typography>
+
+                  <Typography color="text.secondary" marginY={1}>
+                    Salary: {job.salary}
+                  </Typography>
+                  <Typography variant="body2" marginY={1}>
+                    Date Of Posting:{" "}
+                    {new Date(job.dateOfPosting).toLocaleDateString()}
+                  </Typography>
+                  <Typography color="text.secondary" marginY={1}>
+                    Applicants: {job.maxApplicants}
+                  </Typography>
+                  <Typography color="text.secondary" marginY={1}>
+                    Positions: {job.maxPositions - job.acceptedCandidates}
+                  </Typography>
+                  <Box display="flex" alignItems="center">
+                    <Typography variant="body2" marginY={1}>
+                      Rating:
+                    </Typography>
+                    <Rating value={job.rating} readOnly />
+                  </Box>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      marginTop: 2,
+                      backgroundColor: blue[500],
+                      "&:hover": {
+                        backgroundColor: blue[400],
+                      },
+                    }}
+                    onClick={() => handleOpen(job._id, job.title)}
+                    disabled={type === "recruiter"}
+                  >
+                    Apply
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+          .reverse()}
       </Grid>
       {showModal && (
         <ApplyViewDialog

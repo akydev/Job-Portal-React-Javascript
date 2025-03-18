@@ -16,6 +16,7 @@ import {
   Card,
   CardActions,
   Chip,
+  Container,
   Grid2,
   Rating,
   Typography,
@@ -67,7 +68,7 @@ const JobApplications = () => {
   };
 
   return (
-    <Box>
+    <Container maxWidth="md">
       <Grid2 container spacing={3} justifyContent="center">
         <Typography
           variant="h4"
@@ -279,7 +280,7 @@ const JobApplications = () => {
           </Card>
         ))}
       </Grid2>
-    </Box>
+    </Container>
   );
 };
 

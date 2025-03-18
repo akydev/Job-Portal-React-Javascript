@@ -7,7 +7,7 @@ import CustomHeader from "./common/CustomHeader";
 import { Route, Routes } from "react-router-dom";
 import { useTheme } from "./components/ThemeContext"; // Correct import
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
-import Logout from "./common/Logout";
+import Logout from "./Pages/Logout";
 import Applications from "./Pages/applicant/Applications";
 import JobApplications from "./Pages/recruiter/JobApplications";
 

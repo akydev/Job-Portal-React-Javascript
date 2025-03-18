@@ -17,6 +17,8 @@ import UpdateMyJobs from "./UpdateMyJobs";
 const MyJobsChildData = ({ data, triggerRefresh, jobData }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [delOpenModal, setDelOpenModal] = useState(false);
+
   const [id, setId] = useState("");
 
   const handleView = (id) => {
@@ -33,8 +35,12 @@ const MyJobsChildData = ({ data, triggerRefresh, jobData }) => {
   };
 
   const handleDelOpen = (id) => {
-    setShowModal(true);
+    setDelOpenModal(true);
     setId(id);
+  };
+  const handleDelClose = () => {
+    setDelOpenModal(false);
+    setId(null);
   };
   return (
     <Grid item xs={12} sm={6} md={4} key={data._id}>
@@ -114,11 +120,11 @@ const MyJobsChildData = ({ data, triggerRefresh, jobData }) => {
           </Button>
         </CardActions>
       </Card>
-      {showModal && (
+      {delOpenModal && (
         <DeleteMyJobs
           id={id}
-          handleDelClose={handleClose}
-          deleteModal={showModal}
+          handleDelClose={handleDelClose}
+          deleteModal={delOpenModal}
           title={data.title}
           triggerRefresh={triggerRefresh}
         />
